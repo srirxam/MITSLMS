@@ -1,0 +1,971 @@
+/* ============================================================
+   MITS LMS — Portal Shared Styles
+   ============================================================ */
+
+/* ── Sidebar Logo Image ──────────────────────────────────── */
+.sidebar-logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: white;
+    padding: 3px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+    flex-shrink: 0;
+}
+
+.user-chip {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .35rem .75rem .35rem .4rem;
+    border-radius: var(--radius-full);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+}
+
+.top-bar-date {
+    font-size: .8rem;
+    color: var(--text-muted);
+}
+
+/* ── Dashboard Grid ──────────────────────────────────────── */
+.dash-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+}
+
+/* ── Course Card ─────────────────────────────────────────── */
+.course-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.course-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+}
+
+.course-card-top {
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+}
+
+.course-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.course-title {
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.course-teacher {
+    font-size: .775rem;
+    color: var(--text-muted);
+    margin-top: .1rem;
+}
+
+.course-card-bottom {
+    padding: .85rem 1.25rem;
+    border-top: 1px solid var(--border);
+    background: var(--surface-2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.course-progress-label {
+    font-size: .75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* ── Video Cards ─────────────────────────────────────────── */
+.unit-block {
+    margin-bottom: 1.5rem;
+}
+
+.unit-header {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .85rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    cursor: pointer;
+}
+
+.unit-title {
+    font-weight: 700;
+    font-size: .95rem;
+}
+
+.unit-videos {
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    overflow: hidden;
+}
+
+.video-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: .85rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.video-row:last-child {
+    border-bottom: none;
+}
+
+.video-row:hover {
+    background: var(--surface-2);
+}
+
+.video-thumb {
+    width: 80px;
+    height: 50px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, #1E293B, #334155);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.video-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+}
+
+.play-overlay {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, .9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .85rem;
+}
+
+.video-info {
+    flex: 1;
+}
+
+.video-title {
+    font-size: .875rem;
+    font-weight: 600;
+}
+
+.video-meta {
+    font-size: .75rem;
+    color: var(--text-muted);
+    margin-top: .15rem;
+}
+
+.video-status {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+/* ── Test Cards ──────────────────────────────────────────── */
+.test-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    transition: var(--transition);
+}
+
+.test-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.test-card-info {
+    flex: 1;
+}
+
+.test-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.test-card-meta {
+    font-size: .8rem;
+    color: var(--text-muted);
+    margin-top: .3rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.test-card-meta span {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+}
+
+/* ── Timer Badge ─────────────────────────────────────────── */
+.timer-badge {
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 1.1rem;
+    font-weight: 800;
+    font-family: 'JetBrains Mono', monospace;
+    padding: .35rem .85rem;
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border-focus);
+    min-width: 90px;
+    text-align: center;
+}
+
+.timer-badge.warning {
+    background: var(--warning-light);
+    color: var(--warning);
+    border-color: #FCD34D;
+}
+
+.timer-badge.danger {
+    background: var(--danger-light);
+    color: var(--danger);
+    border-color: #FCA5A5;
+    animation: timerPulse 1s infinite;
+}
+
+@keyframes timerPulse {
+
+    0%,
+    100% {
+        opacity: 1
+    }
+
+    50% {
+        opacity: .6
+    }
+}
+
+/* ── Question Card ───────────────────────────────────────── */
+.question-block {
+    margin-bottom: 1.75rem;
+}
+
+.question-text {
+    font-size: .95rem;
+    font-weight: 600;
+    margin-bottom: .85rem;
+}
+
+.question-num {
+    color: var(--primary);
+    font-weight: 800;
+}
+
+.options-list {
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+}
+
+.option-item {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .7rem 1rem;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: .875rem;
+}
+
+.option-item:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.option-item.selected {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.option-item.correct {
+    border-color: var(--success);
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.option-item.wrong {
+    border-color: var(--danger);
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.option-radio {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.option-item.selected .option-radio {
+    border-color: var(--primary);
+    background: var(--primary);
+}
+
+.option-item.selected .option-radio::after {
+    content: '';
+    width: 7px;
+    height: 7px;
+    background: white;
+    border-radius: 50%;
+}
+
+/* ── Q Navigator ─────────────────────────────────────────── */
+.q-navigator {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    margin-bottom: 1.25rem;
+}
+
+.q-nav-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: .8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.q-nav-btn.answered {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.q-nav-btn.current {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* ── Attendance Styles ───────────────────────────────────── */
+.att-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: .4rem;
+}
+
+.att-day-label {
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-align: center;
+    padding: .3rem;
+}
+
+.att-day {
+    aspect-ratio: 1;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .72rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+}
+
+.att-day.present {
+    background: var(--success-light);
+    color: var(--success);
+    border-color: #86EFAC;
+}
+
+.att-day.absent {
+    background: var(--danger-light);
+    color: var(--danger);
+    border-color: #FCA5A5;
+}
+
+.att-day.empty {
+    background: transparent;
+}
+
+.att-day.today {
+    border-color: var(--primary) !important;
+    font-weight: 800;
+}
+
+/* ── Progress Table Cells ────────────────────────────────── */
+.pct-cell {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.pct-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ── Mark Attendance Grid ────────────────────────────────── */
+.student-att-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .75rem .85rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: .5rem;
+    background: var(--surface);
+}
+
+.att-toggle {
+    display: flex;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.att-toggle button {
+    padding: .35rem .85rem;
+    font-size: .8rem;
+    font-weight: 600;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.att-toggle button.present-active {
+    background: var(--success);
+    color: white;
+}
+
+.att-toggle button.absent-active {
+    background: var(--danger);
+    color: white;
+}
+
+/* ── Add Question form ───────────────────────────────────── */
+.q-builder {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    background: var(--surface-2);
+}
+
+.q-builder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .75rem;
+}
+
+/* ── Demo hint reuse ─────────────────────────────────── ── */
+.demo-hint {
+    display: flex;
+    align-items: flex-start;
+    gap: .7rem;
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
+    border-radius: var(--radius);
+    padding: .8rem 1rem;
+    font-size: .8rem;
+    color: #1D4ED8;
+    line-height: 1.5;
+}
+
+.demo-hint code {
+    background: #DBEAFE;
+    padding: .1rem .35rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .78rem;
+}
+
+/* ── Score Result ────────────────────────────────────────── */
+.score-circle {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+    border: 5px solid var(--primary);
+    background: var(--primary-light);
+}
+
+.score-num {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--primary);
+}
+
+.score-total {
+    font-size: .75rem;
+    color: var(--text-muted);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .dash-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-grid > .card:first-child {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Video row stacks on mobile */
+  .video-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .6rem;
+  }
+  .video-thumb {
+    width: 100%;
+    height: 140px;
+  }
+  .video-info { width: 100%; }
+
+  /* Test card stacks */
+  .test-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .test-card-meta { gap: .6rem; }
+
+  /* Student attendance row wraps */
+  .student-att-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+  }
+  .att-toggle { width: 100%; justify-content: stretch; }
+  .att-toggle button { flex: 1; }
+
+  /* Course card top wraps label */
+  .course-card-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Attendance calendar stays 7-col but smaller text */
+  .att-calendar {
+    grid-template-columns: repeat(7, 1fr);
+    gap: .2rem;
+  }
+  .att-day { font-size: .65rem; }
+  .att-day-label { font-size: .6rem; }
+
+  /* Score circle smaller */
+  .score-circle { width: 88px; height: 88px; }
+  .score-num { font-size: 1.3rem; }
+
+  /* Modal grid-2/grid-3 in forms should go 1-col */
+  .modal .grid-2,
+  .modal .grid-3 { grid-template-columns: 1fr; gap: 1.25rem; }
+}
+
+/* ── Course Colour Picker Swatches ───────────────────────── */
+.color-swatch {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+    flex-shrink: 0;
+}
+
+.color-swatch:hover {
+    transform: scale(1.18);
+    box-shadow: 0 2px 8px rgba(0,0,0,.25);
+}
+
+.color-swatch.selected {
+    border-color: var(--text-primary);
+    box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--text-primary);
+    transform: scale(1.12);
+}
+/* =============================================================
+   MOBILE OVERHAUL: Tests, User Management & Student Pages
+   ============================================================= */
+
+/* Make all table wrappers touch-scrollable */
+.table-wrap {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Test stats bar: wraps on narrow screens */
+.test-stats-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1rem;
+  font-size: .85rem;
+  margin-bottom: .75rem;
+}
+.test-stats-bar span {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  white-space: nowrap;
+}
+
+/* Mobile card pattern for user management */
+.user-mobile-card {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: .75rem;
+  box-shadow: var(--shadow-sm);
+}
+.user-mobile-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .6rem;
+}
+.user-mobile-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  font-size: .8rem;
+  color: var(--text-secondary);
+  margin-bottom: .75rem;
+  padding: .5rem;
+  background: var(--surface-2);
+  border-radius: var(--radius);
+}
+.user-mobile-card-meta span {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+.user-mobile-card-actions {
+  display: flex;
+  gap: .5rem;
+}
+.user-mobile-card-actions .btn {
+  flex: 1;
+  justify-content: center;
+  font-size: .8rem;
+  padding: .45rem .6rem;
+}
+
+@media (max-width: 768px) {
+
+  /* ===== TESTS PAGE ========================================= */
+
+  #view-tests .page-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: .75rem;
+  }
+  #view-tests .page-header .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Test card title + status badge: stack */
+  #teacherTestsList .card-body > div:first-child {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .4rem;
+  }
+
+  /* Stats row (flex gap-6): wraps */
+  #teacherTestsList .card-body > .flex.gap-6 {
+    flex-wrap: wrap;
+    gap: .4rem .75rem;
+    font-size: .8rem;
+  }
+
+  /* Submission table: scrollable */
+  #teacherTestsList .table-wrap {
+    overflow-x: auto;
+  }
+  #teacherTestsList table {
+    min-width: 320px;
+  }
+  #teacherTestsList td, #teacherTestsList th {
+    padding: .6rem .75rem;
+    font-size: .8rem;
+  }
+
+  /* ===== USER MANAGEMENT PAGE ============================== */
+
+  #view-users .page-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: .75rem;
+  }
+  #view-users .page-header > div:last-child {
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+    width: 100%;
+  }
+  #view-users .page-header > div:last-child .btn {
+    flex: 1;
+    justify-content: center;
+    font-size: .8rem;
+    padding: .5rem .6rem;
+  }
+
+  /* Hide wide desktop table; show mobile cards */
+  #usersContent .desktop-table { display: none !important; }
+  #usersContent .user-mobile-card { display: block; }
+
+  /* Fallback: if table renders, keep it scrollable */
+  #usersContent .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #usersContent table {
+    min-width: 520px;
+  }
+  #usersContent td, #usersContent th {
+    padding: .55rem .65rem;
+    font-size: .78rem;
+  }
+  #usersContent .btn-sm {
+    padding: .28rem .5rem;
+    font-size: .73rem;
+  }
+
+  /* ===== STUDENT PROGRESS PAGE ============================= */
+
+  #view-progress .page-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: .5rem;
+  }
+  #view-progress .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #view-progress table {
+    min-width: 420px;
+  }
+  #view-progress td, #view-progress th {
+    padding: .6rem .75rem;
+    font-size: .78rem;
+  }
+
+  /* ===== ATTENDANCE MARK PAGE ============================== */
+
+  #attendanceContent .card-body > .grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: .75rem;
+  }
+  #attendanceContent .card-body .form-group:last-child {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: .5rem;
+  }
+  #attendanceContent .card-body .form-group:last-child .btn {
+    flex: 1;
+    justify-content: center;
+    margin-left: 0 !important;
+  }
+
+  /* ===== DASHBOARD PAGE ==================================== */
+
+  #view-dashboard .page-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: .75rem;
+  }
+  #view-dashboard .page-header .flex.gap-3 {
+    flex-direction: column;
+    width: 100%;
+  }
+  #view-dashboard .page-header .flex.gap-3 .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  #teacherCourseOverview .table-wrap {
+    overflow-x: auto;
+  }
+  #teacherCourseOverview table {
+    min-width: 400px;
+  }
+
+  /* ===== COURSES PAGE ====================================== */
+
+  #view-courses .page-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: .75rem;
+  }
+  #view-courses .page-header .flex.gap-3 {
+    flex-direction: column;
+    width: 100%;
+  }
+  #view-courses .page-header .flex.gap-3 .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  #teacherCoursesList .card-header {
+    flex-wrap: wrap;
+    gap: .5rem;
+    align-items: flex-start;
+  }
+  #teacherCoursesList img {
+    width: 56px !important;
+    height: 36px !important;
+    min-width: 56px;
+  }
+
+  /* ===== MATERIALS PAGE ==================================== */
+
+  #view-materials .page-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: .75rem;
+  }
+  #view-materials .page-header > .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  #teacherMaterialsList .flex.items-center.justify-between {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .6rem;
+  }
+  #teacherMaterialsList .flex.items-center.justify-between > .btn {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+
+  #teacherTestsList .card-body {
+    padding: .9rem 1rem;
+  }
+  #teacherTestsList table {
+    min-width: 280px;
+  }
+
+  #usersContent table {
+    min-width: 480px;
+  }
+
+  .stat-card {
+    padding: .85rem;
+    gap: .65rem;
+  }
+  .stat-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+  }
+  .stat-value { font-size: 1.25rem; }
+  .stat-label { font-size: .75rem; }
+
+  .top-bar { padding: 0 .6rem; }
+
+  .att-toggle button {
+    padding: .3rem .5rem;
+    font-size: .75rem;
+  }
+
+  .q-builder .grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .page-title { font-size: 1.1rem; }
+  .page-subtitle { font-size: .78rem; }
+
+  .user-mobile-card-meta span {
+    font-size: .76rem;
+  }
+}
+
+/* Mobile cards list: hidden on desktop, visible on mobile */
+.mobile-cards-list {
+  display: none;
+}
+@media (max-width: 768px) {
+  .desktop-table { display: none !important; }
+  .mobile-cards-list { display: block; }
+}
+
+/* Student Progress Mobile Cards */
+.student-progress-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+.student-progress-card:hover {
+  box-shadow: var(--shadow-md);
+}
+.unit-progress-item {
+  margin-bottom: 0.85rem;
+}
+.unit-progress-item:last-child {
+  margin-bottom: 0;
+}

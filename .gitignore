@@ -1,15 +1,40 @@
+# ── Node ────────────────────────────────
+node_modules/
+npm-debug.log*
+
+# ── Android / Gradle ────────────────────
 *.iml
-.gradle
+.gradle/
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
 local.properties
+/build/
+/captures/
+.externalNativeBuild/
+.cxx/
+android/.gradle/
+android/build/
+gradlew
+gradlew.bat
+gradle/
+build.gradle.kts
+settings.gradle.kts
+gradle.properties
+
+# ── IDE / Editor ────────────────────────
+.idea/
+.vscode/
+*.DS_Store
+
+# ── Firebase cache ───────────────────────
+.firebase/
+firebase-debug.log
+
+# ── Capacitor / Android native ───────────
+android/
+app/
+src/
+oracleJdk-26/
+dataconnect/
+
+# ── Misc ─────────────────────────────────
+"firebase deploy --only firestore"
