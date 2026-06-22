@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard – MITS LMS</title>
+      <link rel="icon" type="image/png" href="icons/icon-192.png"/>
+<link rel="stylesheet" href="css/main.css" />
+      <link rel="icon" type="image/png" href="icons/icon-192.png"/>
+<link rel="stylesheet" href="css/portal.css" />
+</head>
+
+<body>
+
+    <div class="app-layout">
+        <!-- ── Sidebar ─────────────────────────────────────────── -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <img src="icons/icon-192.png" alt="MITS Logo" class="sidebar-logo-img" />
+                <div>
+                    <div class="logo-text">MITS</div>
+                    <div style="font-size:.6rem;color:var(--text-muted);font-weight:500">Student Portal</div>
+                </div>
+            </div>
+
+            <div class="sidebar-user" id="sidebarUser">
+                <div class="user-avatar" id="userAvatar" style="background:#2563EB">DK</div>
+                <div>
+                    <div class="user-name" id="userName">Divyasri K</div>
+                    <div class="user-id" id="userId">STU-2024-0042</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Main Menu</div>
+                <div class="nav-item active" data-view="dashboard" onclick="navigate('dashboard',this)">
+                    <span class="nav-icon">🏠</span> Dashboard
+                </div>
+                <div class="nav-item" data-view="courses" onclick="navigate('courses',this)">
+                    <span class="nav-icon">📚</span> My Courses
+                </div>
+                <div class="nav-item" data-view="videos" onclick="navigate('videos',this)">
+                    <span class="nav-icon">📹</span> Video Lectures
+                </div>
+                <div class="nav-item" data-view="materials" onclick="navigate('materials',this)">
+                    <span class="nav-icon">📄</span> Study Materials
+                </div>
+                <div class="nav-item" data-view="tests" onclick="navigate('tests',this)">
+                    <span class="nav-icon">📋</span> Tests
+                    <span class="nav-badge" id="testBadge">1</span>
+                </div>
+                <div class="nav-section-label">Academic</div>
+                <div class="nav-item" data-view="attendance" onclick="navigate('attendance',this)">
+                    <span class="nav-icon">📅</span> Attendance
+                </div>
+                <div class="nav-item" data-view="grades" onclick="navigate('grades',this)">
+                    <span class="nav-icon">📊</span> Grades
+                </div>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="nav-item" onclick="toggleTheme()">
+                    <span class="nav-icon" id="themeIcon">🌙</span> <span id="themeLabel">Dark Mode</span>
+                </div>
+                <div class="nav-item" style="color:var(--danger)" onclick="logout('student')">
+                    <span class="nav-icon">🚪</span> Logout
+                </div>
+            </div>
+        </aside>
+
+        <!-- Mobile sidebar overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebarMobile()"></div>
+
+        <!-- ── Main Content ────────────────────────────────────── -->
+        <div class="main-content">
+            <header class="top-bar">
+                <div class="flex items-center gap-3">
+                    <button class="btn btn-ghost btn-icon menu-toggle-btn" onclick="toggleSidebar()" id="menuBtn">☰</button>
+                    <div id="topBarTitle" style="font-weight:700;font-size:1.05rem">Dashboard</div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="refresh-btn" id="refreshBtn" onclick="refreshApp()" title="Refresh Data">🔄</button>
+                    <div class="top-bar-date text-sm text-muted" id="topDate"></div>
+                    <div class="user-chip" id="topUserChip">
+                        <div class="user-avatar" style="background:#2563EB;width:30px;height:30px;font-size:.75rem">DK
+                        </div>
+                        <span class="text-sm font-medium" id="topUserName">Divyasri</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="page-content">
+                <!-- ── DASHBOARD VIEW ─────────────────────────────── -->
+                <section id="view-dashboard">
+                    <div class="page-header">
+                        <h1 class="page-title" id="welcomeTitle">Welcome back, Divyasri! 👋</h1>
+                        <p class="page-subtitle">Here's your learning summary for today.</p>
+                    </div>
+
+                    <!-- Stat Cards -->
+                    <div class="grid-4 mb-6" id="statCards"></div>
+
+                    <!-- Dashboard Grid -->
+                    <div class="dash-grid">
+                        <!-- Enrolled Courses -->
+                        <div class="card" style="grid-column:1/3">
+                            <div class="card-header">
+                                <h3 class="font-semibold">📚 My Courses</h3>
+                                <button class="btn btn-outline btn-sm"
+                                    onclick="navigate('courses', document.querySelector('[data-view=courses]'))">View
+                                    All</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="grid-2" id="dashCourseCards"></div>
+                            </div>
+                        </div>
+
+                        <!-- Attendance Summary -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="font-semibold">📅 Attendance</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="attendanceSummary"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent + Upcoming -->
+                    <div class="grid-2 mt-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="font-semibold">🧪 Upcoming Tests</h3>
+                            </div>
+                            <div class="card-body" id="upcomingTests"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="font-semibold">⚡ Recent Activity</h3>
+                            </div>
+                            <div class="card-body" id="recentActivity"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── COURSES VIEW ───────────────────────────────── -->
+                <section id="view-courses" class="hidden">
+                    <div class="page-header">
+                        <h1 class="page-title">📚 My Courses</h1>
+                        <p class="page-subtitle">All your enrolled courses and progress</p>
+                    </div>
+                    <div class="grid-3" id="allCourseCards"></div>
+                </section>
+
+                <!-- ── VIDEO LECTURES VIEW ───────────────────────── -->
+                <section id="view-videos" class="hidden">
+                    <div class="page-header">
+                        <h1 class="page-title">📹 Video Lectures</h1>
+                        <p class="page-subtitle">Watch unit-wise video lessons for your courses</p>
+                    </div>
+                    <div id="videoContent"></div>
+                </section>
+
+                <!-- ── STUDY MATERIALS VIEW ──────────────────────── -->
+                <section id="view-materials" class="hidden">
+                    <div class="page-header">
+                        <h1 class="page-title">📄 Study Materials</h1>
+                        <p class="page-subtitle">Download and read notes, PDFs, and resources for your courses</p>
+                    </div>
+                    <div id="materialsContent"></div>
+                </section>
+
+                <!-- ── TESTS VIEW ─────────────────────────────────── -->
+                <section id="view-tests" class="hidden">
+                    <div class="page-header">
+                        <h1 class="page-title">📋 Tests & Assessments</h1>
+                        <p class="page-subtitle">Take available tests and view your results</p>
+                    </div>
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchTestTab('available',this)">Available</div>
+                        <div class="tab" onclick="switchTestTab('completed',this)">Completed</div>
+                        <div class="tab" onclick="switchTestTab('upcoming',this)">Upcoming</div>
+                    </div>
+                    <div id="testListContainer"></div>
+                </section>
+
+                <!-- ── ATTENDANCE VIEW ────────────────────────────── -->
+                <section id="view-attendance" class="hidden">
+                    <div class="page-header">
+                        <h1 class="page-title">📅 Attendance</h1>
+                        <p class="page-subtitle">Your attendance records and statistics</p>
+                    </div>
+                    <div id="attendanceContent"></div>
+                </section>
+
+                <!-- ── GRADES VIEW ────────────────────────────────── -->
+                <section id="view-grades" class="hidden">
+                    <div class="page-header">
+                        <h1 class="page-title">📊 Grades & Performance</h1>
+                        <p class="page-subtitle">Track your test scores and academic progress</p>
+                    </div>
+                    <div id="gradesContent"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- ── TEST MODAL ─────────────────────────────────────────── -->
+    <div class="modal-overlay" id="testModal">
+        <div class="modal" style="max-width:800px">
+            <div class="modal-header" id="testModalHeader">
+                <div class="modal-title" id="testModalTitle">Test</div>
+                <div id="testTimer" class="timer-badge"></div>
+            </div>
+            <div class="modal-body" id="testModalBody"></div>
+            <div class="modal-footer" id="testModalFooter"></div>
+        </div>
+    </div>
+
+    <!-- ── VIDEO MODAL ────────────────────────────────────────── -->
+    <div class="modal-overlay" id="videoModal">
+        <div class="modal" style="max-width:900px">
+            <div class="modal-header">
+                <div class="modal-title" id="videoModalTitle">Video</div>
+                <button class="modal-close" onclick="closeVideoModal()">✕</button>
+            </div>
+            <div class="modal-body" style="padding:0">
+                <div id="ytPlayerContainer" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden">
+                    <iframe id="ytFrame" width="100%" height="100%" style="position:absolute;top:0;left:0;border:none"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+                </div>
+                <div style="padding:1.25rem" id="videoInfo"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── VIEW MATERIAL MODAL ────────────────────────────────── -->
+    <div class="modal-overlay" id="viewMaterialModal">
+        <div class="modal" style="max-width:600px">
+            <div class="modal-header">
+                <div class="modal-title" id="materialModalTitle">Preview Material</div>
+                <button class="modal-close" onclick="closeMaterialModal()">✕</button>
+            </div>
+            <div class="modal-body" id="materialModalBody" style="padding:1.5rem; line-height:1.7;">
+                <!-- Preview content will be injected here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeMaterialModal()">Close</button>
+                <button class="btn btn-primary" id="materialModalDownloadBtn">⬇️ Download File</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <!-- Firebase v9 Compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/mock-data.js"></script>
+    <script src="js/firebase-data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/student-app.js"></script>
+</body>
+
+</html>

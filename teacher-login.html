@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher Login – MITS LMS</title>
+    <meta name="description"
+        content="Login to MITS teacher portal to manage courses, attendance, and student progress." />
+      <link rel="icon" type="image/png" href="icons/icon-192.png"/>
+<link rel="stylesheet" href="css/main.css" />
+      <link rel="icon" type="image/png" href="icons/icon-192.png"/>
+<link rel="stylesheet" href="css/auth.css" />
+</head>
+
+<body class="auth-body">
+
+    <div class="auth-bg">
+        <div class="auth-orb auth-orb-teacher-1"></div>
+        <div class="auth-orb auth-orb-teacher-2"></div>
+    </div>
+
+    <div class="auth-layout-single">
+
+        <!-- Login Panel -->
+        <div class="auth-panel-single">
+            <div class="auth-card">
+                <!-- Logo -->
+                <div class="auth-card-logo">
+                    <a href="index.html" class="back-link-card">← Back to Home</a>
+                    <div class="auth-logo-inline">
+                        <img src="icons/icon-192.png" alt="MITS Logo" class="logo-img-sm" />
+                        <div>
+                            <div class="logo-name-dark">MITS</div>
+                            <div class="logo-tagline-dark">Learning Management System</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="auth-card-header">
+                    <div class="auth-avatar teacher-avatar">👨‍🏫</div>
+                    <h2>Teacher Sign In</h2>
+                    <p>Access your teaching dashboard</p>
+                </div>
+
+                <form class="auth-form" id="teacherLoginForm" onsubmit="return handleTeacherLogin(event)">
+
+
+                    <div class="form-group">
+                        <label class="form-label" for="teacherId">Teacher ID</label>
+                        <div class="input-group">
+                            <span class="input-icon">🏫</span>
+                            <input type="text" id="teacherId" class="form-input" placeholder="e.g. TCH-TOUR-0001"
+                                autocomplete="username" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="teacherPassword">Password</label>
+                        <div class="input-group">
+                            <span class="input-icon">🔒</span>
+                            <input type="password" id="teacherPassword" class="form-input"
+                                placeholder="Enter your password" autocomplete="current-password"
+                                required />
+                            <button type="button" class="input-suffix"
+                                onclick="togglePassword('teacherPassword', this)">👁️</button>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rememberMeT" checked />
+                            <span class="checkbox-box checkbox-box-teacher"></span>
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-link-teacher">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary btn-xl w-full" id="teacherLoginBtn">
+                        <span id="teacherLoginBtnText">Sign In</span>
+                    </button>
+
+                    <div id="teacherLoginError" class="alert alert-danger hidden" style="margin-top:1rem">
+                        <span class="alert-icon">❌</span>
+                        <span id="teacherLoginErrorMsg">Invalid credentials. Please try again.</span>
+                    </div>
+
+                </form>
+
+                <div class="auth-footer">
+                    <p>Not a teacher? <a href="student-login.html" class="auth-link-teacher">Go to Student Login →</a>
+                    </p>
+                    <p style="margin-top:.5rem">Contact admin if you need your credentials reset.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <!-- Firebase v9 Compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/mock-data.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        async function handleTeacherLogin(e) {
+            e.preventDefault();
+            const id  = document.getElementById('teacherId').value.trim();
+            const pwd = document.getElementById('teacherPassword').value;
+            const btn    = document.getElementById('teacherLoginBtn');
+            const errBox = document.getElementById('teacherLoginError');
+            const errMsg = document.getElementById('teacherLoginErrorMsg');
+
+            btn.disabled = true;
+            document.getElementById('teacherLoginBtnText').textContent = 'Signing in...';
+            errBox.classList.add('hidden');
+
+            try {
+                // ── Try Firestore first ──────────────────────────────
+                const snap = await db.collection('teachers')
+                    .where('id', '==', id)
+                    .get();
+
+                if (!snap.empty) {
+                    const user = snap.docs[0].data();
+                    if (user.password === pwd) {
+                        sessionStorage.setItem('mits_user',
+                            JSON.stringify({ ...user, role: user.isAdmin ? 'admin' : 'teacher' }));
+                        showToast('✅ Login successful! Redirecting...', 'success');
+                        setTimeout(() => { window.location.href = 'teacher.html'; }, 900);
+                        return false;
+                    } else {
+                        errMsg.textContent = 'Invalid Teacher ID or password.';
+                        errBox.classList.remove('hidden');
+                        btn.disabled = false;
+                        document.getElementById('teacherLoginBtnText').textContent = 'Sign In';
+                        return false;
+                    }
+                }
+
+                // ── Fallback to mock data (offline / before seeding) ─
+                const localTeachers = JSON.parse(localStorage.getItem('mock_teachers')) || MOCK_DATA.teachers;
+                const mockUser = localTeachers.find(t => t.id === id);
+                if (mockUser) {
+                    if (mockUser.password === pwd) {
+                        sessionStorage.setItem('mits_user',
+                            JSON.stringify({ ...mockUser, role: mockUser.isAdmin ? 'admin' : 'teacher' }));
+                        showToast('✅ Login successful! (mock mode)', 'success');
+                        setTimeout(() => { window.location.href = 'teacher.html'; }, 900);
+                        return false;
+                    } else {
+                        errMsg.textContent = 'Invalid Teacher ID or password.';
+                        errBox.classList.remove('hidden');
+                        btn.disabled = false;
+                        document.getElementById('teacherLoginBtnText').textContent = 'Sign In';
+                        return false;
+                    }
+                }
+
+                // ── No match ─────────────────────────────────────────
+                errMsg.textContent = 'Invalid Teacher ID or password.';
+                errBox.classList.remove('hidden');
+                btn.disabled = false;
+                document.getElementById('teacherLoginBtnText').textContent = 'Sign In';
+
+            } catch (err) {
+                console.warn('Firebase error, falling back to mock:', err.message);
+                // Offline fallback
+                const localTeachers = JSON.parse(localStorage.getItem('mock_teachers')) || MOCK_DATA.teachers;
+                const mockUser = localTeachers.find(t => t.id === id);
+                if (mockUser) {
+                    if (mockUser.password === pwd) {
+                        sessionStorage.setItem('mits_user',
+                            JSON.stringify({ ...mockUser, role: mockUser.isAdmin ? 'admin' : 'teacher' }));
+                        showToast('✅ Login successful! (offline mode)', 'success');
+                        setTimeout(() => { window.location.href = 'teacher.html'; }, 900);
+                    } else {
+                        errMsg.textContent = 'Invalid Teacher ID or password.';
+                        errBox.classList.remove('hidden');
+                        btn.disabled = false;
+                        document.getElementById('teacherLoginBtnText').textContent = 'Sign In';
+                    }
+                } else {
+                    errMsg.textContent = 'Invalid credentials. Check connection and try again.';
+                    errBox.classList.remove('hidden');
+                    btn.disabled = false;
+                    document.getElementById('teacherLoginBtnText').textContent = 'Sign In';
+                }
+            }
+            return false;
+        }
+
+        function togglePassword(id, btn) {
+            const inp = document.getElementById(id);
+            inp.type = inp.type === 'password' ? 'text' : 'password';
+            btn.textContent = inp.type === 'password' ? '👁️' : '🙈';
+        }
+    </script>
+</body>
+
+</html>

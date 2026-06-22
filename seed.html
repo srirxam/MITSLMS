@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MITS Firebase Seeder</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0F172A; color: #F1F5F9; padding: 2rem; }
+    h1 { color: #60A5FA; }
+    button { padding: .85rem 2rem; font-size: 1rem; background: #2563EB; color: white;
+             border: none; border-radius: 8px; cursor: pointer; margin-top: 1rem; }
+    button:hover { background: #1D4ED8; }
+    button:disabled { background: #475569; cursor: not-allowed; }
+    #log { margin-top: 1.5rem; background: #1E293B; border-radius: 8px; padding: 1.25rem;
+           font-size: .82rem; line-height: 1.7; white-space: pre-wrap; max-height: 500px; overflow-y: auto; }
+    .ok  { color: #4ADE80; }
+    .err { color: #F87171; }
+    .hd  { color: #FACC15; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>🔥 MITS Firebase Seeder</h1>
+  <p>Click the button <strong>once</strong> to upload all mock data to your Firestore database.</p>
+  <button id="seedBtn" onclick="seedFirebase()">🚀 Seed All Data to Firebase</button>
+  <div id="seedLog"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/seed-firebase.js"></script>
+</body>
+</html>

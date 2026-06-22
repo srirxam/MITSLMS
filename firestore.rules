@@ -1,0 +1,130 @@
+rules_version = '2';
+
+// ============================================================
+//  MITS LMS — Firestore Security Rules
+//  Project : mits-d5a16
+//  Roles   : student | teacher | admin
+//  Collections:
+//    students · teachers · courses · tests · submissions
+//    attendance · videoProgress
+// ============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Helper Functions ────────────────────────────────────────
+
+    // Is the caller signed-in with Firebase Auth?
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Pull the caller's role from their Firestore profile.
+    // We look in BOTH collections so a teacher or student
+    // can be identified from a single call.
+    function callerRole() {
+      // Check teacher collection first
+      let teacherDoc = get(/databases/$(database)/documents/teachers/$(request.auth.uid));
+      let studentDoc = get(/databases/$(database)/documents/students/$(request.auth.uid));
+      return teacherDoc.data.role != null ? teacherDoc.data.role :
+             studentDoc.data.role  != null ? studentDoc.data.role  :
+             "unknown";
+    }
+
+    function isAdmin() {
+      return isSignedIn() && callerRole() == "admin";
+    }
+
+    function isTeacher() {
+      return isSignedIn() && (callerRole() == "teacher" || callerRole() == "admin");
+    }
+
+    function isStudent() {
+      return isSignedIn() && callerRole() == "student";
+    }
+
+    // ─── /students ───────────────────────────────────────────────
+    // • Admin can do anything
+    // • Teachers can read all students (for their dashboard)
+    // • A student can only read/write their OWN document
+    match /students/{studentId} {
+      allow read:   if isTeacher();
+      allow read:   if isStudent() && request.auth.uid == studentId;
+      allow create: if isAdmin();
+      allow update: if isAdmin()
+                    || (isStudent() && request.auth.uid == studentId);
+      allow delete: if isAdmin();
+    }
+
+    // ─── /teachers ───────────────────────────────────────────────
+    // • Admin: full access
+    // • A teacher can read/update their OWN document
+    // • Students can read teacher list (needed for profile cards)
+    match /teachers/{teacherId} {
+      allow read:   if isSignedIn();
+      allow create: if isAdmin();
+      allow update: if isAdmin()
+                    || (isTeacher() && request.auth.uid == teacherId);
+      allow delete: if isAdmin();
+    }
+
+    // ─── /courses ────────────────────────────────────────────────
+    // • Admin / Teacher: full read + write
+    // • Students: read-only (they view but cannot modify courses)
+    match /courses/{courseId} {
+      allow read:   if isSignedIn();
+      allow create: if isTeacher();
+      allow update: if isTeacher();
+      allow delete: if isAdmin();
+    }
+
+    // ─── /tests ──────────────────────────────────────────────────
+    // • Teacher creates / updates / deletes tests
+    // • Students read tests (to attempt them)
+    match /tests/{testId} {
+      allow read:   if isSignedIn();
+      allow create: if isTeacher();
+      allow update: if isTeacher();
+      allow delete: if isTeacher();
+    }
+
+    // ─── /submissions ────────────────────────────────────────────
+    // • Students create their own submission (studentId field must match uid)
+    // • Teachers & Admin can read all submissions for grading
+    // • Teacher can update a submission (to add grade / feedback)
+    // • Only admin can delete submissions
+    match /submissions/{submissionId} {
+      allow read:   if isTeacher();
+      allow read:   if isStudent()
+                    && resource.data.studentId == request.auth.uid;
+      allow create: if isStudent()
+                    && request.resource.data.studentId == request.auth.uid;
+      allow update: if isTeacher()
+                    || (isStudent() && resource.data.studentId == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    // ─── /attendance ─────────────────────────────────────────────
+    // Document ID = studentId
+    // • Teachers read/write all attendance records
+    // • A student can only read their OWN attendance doc
+    match /attendance/{studentId} {
+      allow read:   if isTeacher();
+      allow read:   if isStudent() && request.auth.uid == studentId;
+      allow write:  if isTeacher();
+    }
+
+    // ─── /videoProgress ──────────────────────────────────────────
+    // Document ID = studentId
+    // • A student writes only their OWN progress
+    // • Teachers read all progress (for reporting)
+    match /videoProgress/{studentId} {
+      allow read:   if isTeacher();
+      allow read:   if isStudent() && request.auth.uid == studentId;
+      allow write:  if isStudent() && request.auth.uid == studentId;
+      // Allow teacher to reset/update a student's progress if needed
+      allow write:  if isTeacher();
+    }
+
+  }
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MITS LMS – Modern Integrated Teaching System</title>
+  <meta name="description" content="MITS Learning Management System – Empowering Education with Smart Technology for Students and Teachers."/>
+    <link rel="icon" type="image/png" href="icons/icon-192.png"/>
+<link rel="stylesheet" href="css/main.css"/>
+    <link rel="icon" type="image/png" href="icons/icon-192.png"/>
+<link rel="stylesheet" href="css/landing.css"/>
+</head>
+<body>
+
+<!-- ── Animated Background ─────────────────────────────────── -->
+<div class="landing-bg">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- ── Navigation ──────────────────────────────────────────── -->
+<nav class="landing-nav">
+  <div class="nav-logo">
+    <img src="icons/icon-192.png" alt="MITS Logo" class="nav-logo-img"/>
+    <div>
+      <div class="logo-name">MITS</div>
+      <div class="logo-tagline">Learning Management System</div>
+    </div>
+  </div>
+  <div class="nav-actions">
+    <button class="btn btn-ghost btn-sm" id="themeToggle">🌙 Dark Mode</button>
+  </div>
+</nav>
+
+<!-- ── Hero Section ────────────────────────────────────────── -->
+<main class="landing-main">
+  <div class="hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Academic Year 2024–25 Now Active
+    </div>
+
+    <h1 class="hero-title">
+      Empower Learning<br/>
+      <span class="gradient-text">Without Limits</span>
+    </h1>
+
+
+    <!-- ── Portal Cards ──────────────────────────────────── -->
+    <div class="portal-grid">
+
+      <!-- Student Portal -->
+      <div class="portal-card student-card" onclick="window.location.href='student-login.html'">
+        <div class="portal-glow student-glow"></div>
+        <div class="portal-icon">🎒</div>
+        <div class="portal-content">
+          <h2 class="portal-title">Student Portal</h2>
+        </div>
+        <div class="portal-cta">
+          <span>Login as Student</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </div>
+
+      <!-- Teacher Portal -->
+      <div class="portal-card teacher-card" onclick="window.location.href='teacher-login.html'">
+        <div class="portal-glow teacher-glow"></div>
+        <div class="portal-icon">👨‍🏫</div>
+        <div class="portal-content">
+          <h2 class="portal-title">Teacher Portal</h2>
+        </div>
+        <div class="portal-cta teacher-cta">
+          <span>Login as Teacher</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </div>
+
+    </div><!-- /portal-grid -->
+  </div><!-- /hero -->
+
+
+
+</main>
+
+<!-- ── Footer ──────────────────────────────────────────────── -->
+<footer class="landing-footer">
+  <p>© 2024 MITS Learning Management System · Built for Excellence in Education</p>
+</footer>
+
+<script>
+  // Theme Toggle
+  const themeBtn = document.getElementById('themeToggle');
+  const html = document.documentElement;
+  let dark = false;
+  themeBtn.addEventListener('click', () => {
+    dark = !dark;
+    html.setAttribute('data-theme', dark ? 'dark' : 'light');
+    themeBtn.textContent = dark ? '☀️ Light Mode' : '🌙 Dark Mode';
+  });
+
+
+</script>
+</body>
+</html>

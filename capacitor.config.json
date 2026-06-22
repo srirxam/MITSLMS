@@ -1,0 +1,22 @@
+{
+  "appId": "com.mits.lms",
+  "appName": "MITS LMS",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": true
+  },
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "Browser": {
+      "presentationStyle": "fullscreen"
+    }
+  },
+  "allowNavigation": [
+    "*.firebasestorage.googleapis.com",
+    "*.googleapis.com",
+    "storage.googleapis.com",
+    "firebasestorage.googleapis.com"
+  ]
+}

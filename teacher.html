@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher Dashboard – MITS LMS</title>
+      <link rel="icon" type="image/png" href="icons/icon-192.png"/>
+<link rel="stylesheet" href="css/main.css" />
+      <link rel="icon" type="image/png" href="icons/icon-192.png"/>
+<link rel="stylesheet" href="css/portal.css" />
+</head>
+
+<body>
+    <div class="app-layout">
+        <!-- ── Sidebar ─────────────────────────────────────────── -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <img src="icons/icon-192.png" alt="MITS Logo" class="sidebar-logo-img" />
+                <div>
+                    <div class="logo-text">MITS</div>
+                    <div style="font-size:.6rem;color:var(--text-muted);font-weight:500">Teacher Portal</div>
+                </div>
+            </div>
+
+            <div class="sidebar-user" id="sidebarUser">
+                <div class="user-avatar" id="userAvatar" style="background:#7C3AED">RG</div>
+                <div>
+                    <div class="user-name" id="userName">Prof. Ramesh G</div>
+                    <div class="user-id" id="userId">TCH-TOUR-0001</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Teaching</div>
+                <div class="nav-item active" data-view="dashboard" onclick="navigate('dashboard',this)">
+                    <span class="nav-icon">🏠</span> Dashboard
+                </div>
+                <div class="nav-item" data-view="courses" onclick="navigate('courses',this)">
+                    <span class="nav-icon">📚</span> My Courses
+                </div>
+                <div class="nav-item" data-view="materials" onclick="navigate('materials',this)">
+                    <span class="nav-icon">📄</span> Study Materials
+                </div>
+                <div class="nav-item" data-view="attendance" onclick="navigate('attendance',this)">
+                    <span class="nav-icon">📅</span> Attendance
+                </div>
+                <div class="nav-item" data-view="tests" onclick="navigate('tests',this)">
+                    <span class="nav-icon">📋</span> Tests
+                </div>
+                <div class="nav-section-label">Analytics</div>
+                <div class="nav-item" data-view="progress" onclick="navigate('progress',this)">
+                    <span class="nav-icon">📈</span> Student Progress
+                </div>
+                <div class="nav-section-label admin-only hidden">People</div>
+                <div class="nav-item admin-only hidden" data-view="users" onclick="navigate('users',this)">
+                    <span class="nav-icon">👥</span> User Management
+                </div>
+                <div class="nav-item admin-only hidden" onclick="openCreateUserModal('student')">
+                    <span class="nav-icon">➕</span> Add New Student
+                </div>
+                <div class="nav-item admin-only hidden" onclick="openCreateUserModal('teacher')">
+                    <span class="nav-icon">➕</span> Add New Teacher
+                </div>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="nav-item" onclick="toggleTheme()">
+                    <span class="nav-icon" id="themeIcon">🌙</span> <span id="themeLabel">Dark Mode</span>
+                </div>
+                <div class="nav-item" style="color:var(--danger)" onclick="logout('teacher')">
+                    <span class="nav-icon">🚪</span> Logout
+                </div>
+            </div>
+        </aside>
+
+        <!-- Mobile sidebar overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebarMobile()"></div>
+
+        <!-- ── Main Content ────────────────────────────────────── -->
+        <div class="main-content">
+            <header class="top-bar">
+                <div class="flex items-center gap-3">
+                    <button class="btn btn-ghost btn-icon menu-toggle-btn" onclick="toggleSidebar()">☰</button>
+                    <div id="topBarTitle" style="font-weight:700;font-size:1.05rem">Dashboard</div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="refresh-btn" id="refreshBtn" onclick="refreshApp()" title="Refresh Data">🔄</button>
+                    <div class="top-bar-date text-sm text-muted" id="topDate"></div>
+                    <span class="badge badge-secondary hidden admin-only" id="adminBadge">👑 Admin</span>
+                    <div class="user-chip">
+                        <div class="user-avatar" style="background:#7C3AED;width:30px;height:30px;font-size:.75rem"
+                            id="topAvatar">RG</div>
+                        <span class="text-sm font-medium" id="topUserName">Prof. Ramesh</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="page-content">
+                <!-- ── DASHBOARD VIEW ─────────────────────────────── -->
+                <section id="view-dashboard">
+                    <div class="page-header flex justify-between items-center">
+                        <div>
+                            <h1 class="page-title" id="teacherWelcome">Good morning, Prof. Ramesh! 👋</h1>
+                            <p class="page-subtitle">Here's your class overview for today.</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="btn btn-outline btn-sm"
+                                onclick="navigate('attendance',document.querySelector('[data-view=attendance]'))">✅ Mark
+                                Attendance</button>
+                            <button class="btn btn-primary btn-sm"
+                                onclick="navigate('tests',document.querySelector('[data-view=tests]'))">📝 Create
+                                Test</button>
+                        </div>
+                    </div>
+
+                    <div class="grid-4 mb-6" id="teacherStats"></div>
+
+                    <div class="dash-grid">
+                        <div class="card" style="grid-column:1/3">
+                            <div class="card-header">
+                                <h3 class="font-semibold">📚 My Courses Overview</h3>
+                            </div>
+                            <div class="card-body" id="teacherCourseOverview"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="font-semibold">⚠️ Alerts</h3>
+                            </div>
+                            <div class="card-body" id="teacherAlerts"></div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2 mt-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="font-semibold">📋 Recent Submissions</h3>
+                            </div>
+                            <div class="card-body" id="recentSubmissions"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="font-semibold">🎬 Recent Video Activity</h3>
+                            </div>
+                            <div class="card-body" id="recentVideoActivity"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── COURSES VIEW ───────────────────────────────── -->
+                <section id="view-courses" class="hidden">
+                    <div class="page-header flex justify-between items-center">
+                        <div>
+                            <h1 class="page-title">📚 Course Management</h1>
+                            <p class="page-subtitle">Manage your courses, units, and video content</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="btn btn-outline" onclick="openAddUnitModal()">📁 Add New Unit</button>
+                            <button class="btn btn-outline" onclick="openAddVideoModal()">🎬 Add Video Link</button>
+                            <button class="btn btn-primary" id="addNewCourseBtn" onclick="openAddCourseModal()">➕ Add New Course</button>
+                        </div>
+                    </div>
+                    <div id="teacherCoursesList"></div>
+                </section>
+
+                <!-- ── STUDY MATERIALS VIEW ──────────────────────── -->
+                <section id="view-materials" class="hidden">
+                    <div class="page-header flex justify-between items-center">
+                        <div>
+                            <h1 class="page-title">📄 Study Materials</h1>
+                            <p class="page-subtitle">Upload and manage resources for your students</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openAddMaterialModal()">➕ Upload Material</button>
+                    </div>
+                    <div id="teacherMaterialsList"></div>
+                </section>
+
+                <!-- ── ATTENDANCE VIEW ────────────────────────────── -->
+                <section id="view-attendance" class="hidden">
+                    <div class="page-header">
+                        <h1 class="page-title">📅 Attendance Management</h1>
+                        <p class="page-subtitle">Mark and monitor student attendance</p>
+                    </div>
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchAttTab('mark',this)">Mark Attendance</div>
+                        <div class="tab" onclick="switchAttTab('report',this)">View Reports</div>
+                    </div>
+                    <div id="attendanceContent"></div>
+                </section>
+
+                <!-- ── TESTS VIEW ─────────────────────────────────── -->
+                <section id="view-tests" class="hidden">
+                    <div class="page-header flex justify-between items-center">
+                        <div>
+                            <h1 class="page-title">📋 Test Management</h1>
+                            <p class="page-subtitle">Create and manage student assessments</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openCreateTestModal()">➕ Create Test</button>
+                    </div>
+                    <div id="teacherTestsList"></div>
+                </section>
+
+                <!-- ── PROGRESS VIEW ──────────────────────────────── -->
+                <section id="view-progress" class="hidden">
+                    <div class="page-header">
+                        <h1 class="page-title">📈 Student Video Progress</h1>
+                        <p class="page-subtitle">Track how students are engaging with video content</p>
+                    </div>
+                    <div id="progressContent"></div>
+                </section>
+
+                <!-- ── USERS VIEW (Admin only) ────────────────────── -->
+                <section id="view-users" class="hidden">
+                    <div class="page-header flex justify-between items-center">
+                        <div>
+                            <h1 class="page-title">👥 User Management</h1>
+                            <p class="page-subtitle">Create and manage student and teacher accounts</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="btn btn-outline" onclick="openCreateUserModal('student')">➕ Add
+                                Student</button>
+                            <button class="btn btn-secondary" onclick="openCreateUserModal('teacher')">➕ Add
+                                Teacher</button>
+                        </div>
+                    </div>
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchUserTab('students',this)">Students</div>
+                        <div class="tab" onclick="switchUserTab('teachers',this)">Teachers</div>
+                    </div>
+                    <div id="usersContent"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- ── ADD VIDEO MODAL ────────────────────────────────────── -->
+    <div class="modal-overlay" id="addVideoModal">
+        <div class="modal" style="max-width:520px">
+            <div class="modal-header">
+                <div class="modal-title">🎬 Add YouTube Video Link</div>
+                <button class="modal-close" onclick="closeModal('addVideoModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="flex flex-col gap-4">
+                    <div class="form-group">
+                        <label class="form-label">Select Course</label>
+                        <select class="form-select" id="videoCourse" onchange="loadUnitsForVideo()"></select>
+                    </div>
+                    <div class="form-group">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="form-label" style="margin-bottom:0">Unit Selection</label>
+                            <div class="flex gap-3" style="font-size:0.75rem;font-weight:500">
+                                <label class="flex items-center gap-1 cursor-pointer">
+                                    <input type="radio" name="videoUnitMode" value="select" checked onclick="toggleVideoUnitMode('select')" style="width:13px;height:13px;cursor:pointer" />
+                                    Select Existing
+                                </label>
+                                <label class="flex items-center gap-1 cursor-pointer">
+                                    <input type="radio" name="videoUnitMode" value="create" onclick="toggleVideoUnitMode('create')" style="width:13px;height:13px;cursor:pointer" />
+                                    Create New
+                                </label>
+                            </div>
+                        </div>
+                        <div id="videoUnitSelectWrapper">
+                            <select class="form-select" id="videoUnit"></select>
+                        </div>
+                        <div id="videoUnitCreateWrapper" class="hidden">
+                            <div class="flex gap-2">
+                                <input type="text" id="videoNewUnitTitle" class="form-input" placeholder="e.g. Unit 3: Dynamic Styling" />
+                                <button type="button" class="btn btn-secondary btn-sm" onclick="createUnitInline()" id="btnCreateUnitInline" style="white-space:nowrap">Create & Select</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">YouTube Video URL</label>
+                        <div class="input-group">
+                            <span class="input-icon">🔗</span>
+                            <input type="url" id="ytUrl" class="form-input"
+                                placeholder="https://www.youtube.com/watch?v=..." oninput="previewYT()" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Video Title</label>
+                        <input type="text" id="vtTitle" class="form-input"
+                            placeholder="Fetched automatically or enter manually" />
+                    </div>
+                    <div id="ytPreview" class="hidden">
+                        <div
+                            style="background:var(--surface-2);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)">
+                            <iframe id="ytPreviewFrame" width="100%" height="180" style="border:none"
+                                allowfullscreen></iframe>
+                            <div style="padding:.75rem .85rem" id="ytPreviewInfo"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('addVideoModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveVideo()">💾 Save Video</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── ADD UNIT MODAL ────────────────────────────────────── -->
+    <div class="modal-overlay" id="addUnitModal">
+        <div class="modal" style="max-width:480px">
+            <div class="modal-header">
+                <div class="modal-title">📁 Add New Unit</div>
+                <button class="modal-close" onclick="closeModal('addUnitModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="flex flex-col gap-4">
+                    <div class="form-group">
+                        <label class="form-label">Select Course</label>
+                        <select class="form-select" id="unitCourse"></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Unit Title <span style="color:var(--danger)">*</span></label>
+                        <input type="text" id="newUnitTitle" class="form-input" placeholder="e.g. Unit 4: Advanced Concepts" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('addUnitModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveUnit()">💾 Save Unit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── ADD MATERIAL MODAL ─────────────────────────────────── -->
+    <div class="modal-overlay" id="addMaterialModal">
+        <div class="modal" style="max-width:520px">
+            <div class="modal-header">
+                <div class="modal-title">📄 Add Study Material</div>
+                <button class="modal-close" onclick="closeModal('addMaterialModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="flex flex-col gap-4">
+                    <div class="form-group">
+                        <label class="form-label">Select Course</label>
+                        <input type="text" id="materialCourseInput" class="form-input" placeholder="Type course name..." list="materialCoursesDatalist" />
+                        <datalist id="materialCoursesDatalist"></datalist>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Material Title</label>
+                        <input type="text" id="matTitle" class="form-input" placeholder="e.g. Chapter 1 Notes" />
+                    </div>
+
+                    <!-- Tab switcher: Upload File vs Drive Link -->
+                    <div class="form-group">
+                        <label class="form-label">Source</label>
+                        <div class="mat-source-toggle">
+                            <label class="mat-source-btn mat-source-active" id="matBtnFile">
+                                <input type="radio" name="matSourceMode" value="file" checked onclick="toggleMatSource('file')" style="display:none" />
+                                📁 Upload File
+                            </label>
+                            <label class="mat-source-btn" id="matBtnDrive">
+                                <input type="radio" name="matSourceMode" value="drive" onclick="toggleMatSource('drive')" style="display:none" />
+                                🔗 Google Drive Link
+                            </label>
+                        </div>
+
+                        <!-- File Upload Panel -->
+                        <div id="matFilePanel">
+                            <input type="file" id="matFile" class="form-input" />
+                            <span class="text-xs text-muted mt-1">Accepted formats: PDF, DOCX, PPTX (Max 10MB)</span>
+                        </div>
+
+                        <!-- Drive Link Panel -->
+                        <div id="matDrivePanel" class="hidden">
+                            <div class="input-group">
+                                <span class="input-icon">🔗</span>
+                                <input type="url" id="matDriveUrl" class="form-input"
+                                    placeholder="https://drive.google.com/file/d/..." oninput="previewDriveLink()" />
+                            </div>
+                            <span class="text-xs text-muted mt-1">Paste a Google Drive shareable link. Make sure sharing is set to <strong>"Anyone with the link"</strong>.</span>
+                            <!-- Drive link preview -->
+                            <div id="matDrivePreview" class="hidden" style="margin-top:.75rem;padding:.75rem;background:var(--surface-2);border-radius:var(--radius);border:1px solid var(--border)">
+                                <div class="flex items-center gap-3">
+                                    <div style="width:42px;height:42px;background:#1a73e822;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">📂</div>
+                                    <div style="flex:1;min-width:0">
+                                        <div class="text-sm font-semibold" style="word-break:break-all" id="matDrivePreviewUrl"></div>
+                                        <div class="text-xs text-muted mt-1">🔗 Google Drive File Link detected</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('addMaterialModal')">Cancel</button>
+                <button class="btn btn-primary" id="matSaveBtn" onclick="saveMaterial()">📤 Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── CREATE TEST MODAL ──────────────────────────────────── -->
+    <div class="modal-overlay" id="createTestModal">
+        <div class="modal" style="max-width:650px">
+            <div class="modal-header">
+                <div class="modal-title">📝 Create New Test</div>
+                <button class="modal-close" onclick="closeModal('createTestModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="flex flex-col gap-4">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Test Title</label>
+                            <input type="text" id="tstTitle" class="form-input" placeholder="e.g. Mid-Term Test 1" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Course</label>
+                            <select class="form-select" id="tstCourse"></select>
+                        </div>
+                    </div>
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label class="form-label">Duration (mins)</label>
+                            <input type="number" id="tstDuration" class="form-input" value="30" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Total Marks</label>
+                            <input type="number" id="tstTotal" class="form-input" value="50" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Passing Marks</label>
+                            <input type="number" id="tstPass" class="form-input" value="25" />
+                        </div>
+                    </div>
+                    <hr style="border-color:var(--border)" />
+                    <h4 class="font-semibold">Questions <span id="qCount" class="badge badge-primary">0 added</span>
+                    </h4>
+                    <div id="questionsList" class="flex flex-col gap-3"></div>
+                    <button class="btn btn-outline w-full" onclick="addQuestion()">➕ Add MCQ Question</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('createTestModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveTest()">🚀 Publish Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── CREATE USER MODAL ──────────────────────────────────── -->
+    <div class="modal-overlay" id="createUserModal">
+        <div class="modal" style="max-width:480px">
+            <div class="modal-header">
+                <div class="modal-title" id="createUserTitle">➕ Add Student</div>
+                <button class="modal-close" onclick="closeModal('createUserModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="flex flex-col gap-4">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" id="newUserName" class="form-input" placeholder="Full name" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Department</label>
+                            <input type="text" id="newUserDept" class="form-input" placeholder="e.g. Computer Science" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="newUserEmail" class="form-input" placeholder="email@mits.edu" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone</label>
+                        <input type="tel" id="newUserPhone" class="form-input" placeholder="10-digit mobile number" />
+                    </div>
+                    <div id="generatedId" class="demo-hint" style="display:none">
+                        <span>🎉</span>
+                        <div>Generated ID: <code id="genIdValue"></code> &nbsp;|&nbsp; Temp Password: <code
+                                id="genPwdValue"></code></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('createUserModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="createUser()">✅ Create Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── EDIT USER MODAL ────────────────────────────────────── -->
+    <div class="modal-overlay" id="editUserModal">
+        <div class="modal" style="max-width:480px">
+            <div class="modal-header">
+                <div class="modal-title" id="editUserTitle">✏️ Edit User</div>
+                <button class="modal-close" onclick="closeModal('editUserModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="flex flex-col gap-4">
+                    <input type="hidden" id="editUserType" />
+                    <div class="form-group">
+                        <label class="form-label">User ID (Read-only)</label>
+                        <input type="text" id="editUserId" class="form-input" disabled style="background:var(--surface-2);cursor:not-allowed;" />
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" id="editUserName" class="form-input" placeholder="Full name" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Department</label>
+                            <input type="text" id="editUserDept" class="form-input" placeholder="e.g. Computer Science" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="editUserEmail" class="form-input" placeholder="email@mits.edu" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone</label>
+                        <input type="tel" id="editUserPhone" class="form-input" placeholder="10-digit mobile number" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="text" id="editUserPassword" class="form-input" placeholder="User password" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" id="editCoursesLabel">Enrolled Courses</label>
+                        <div class="flex flex-col gap-2" id="editUserCoursesList" style="max-height:150px;overflow-y:auto;padding:.5rem;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--surface)">
+                            <!-- Dynamic course checkboxes will go here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('editUserModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="updateUser()">💾 Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── ADD COURSE MODAL ─────────────────────────────────── -->
+    <div class="modal-overlay" id="addCourseModal">
+        <div class="modal" style="max-width:560px">
+            <div class="modal-header">
+                <div class="modal-title">📚 Add New Course</div>
+                <button class="modal-close" onclick="closeModal('addCourseModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="flex flex-col gap-4">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Course Title <span style="color:var(--danger)">*</span></label>
+                            <input type="text" id="newCourseTitle" class="form-input" placeholder="e.g. Digital Marketing" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Department <span style="color:var(--danger)">*</span></label>
+                            <input type="text" id="newCourseDept" class="form-input" placeholder="e.g. Computer Science" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea id="newCourseDesc" class="form-input" rows="3"
+                            placeholder="Brief description of this course…"
+                            style="resize:vertical;min-height:80px"></textarea>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Course Icon (Emoji)</label>
+                            <input type="text" id="newCourseIcon" class="form-input" placeholder="e.g. 📊" maxlength="4" style="font-size:1.4rem" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Theme Colour</label>
+                            <div class="flex gap-2 flex-wrap" id="courseColorPicker">
+                                <div class="color-swatch selected" data-color="#2563EB" style="background:#2563EB" onclick="selectCourseColor(this,'#2563EB')"></div>
+                                <div class="color-swatch" data-color="#7C3AED" style="background:#7C3AED" onclick="selectCourseColor(this,'#7C3AED')"></div>
+                                <div class="color-swatch" data-color="#16A34A" style="background:#16A34A" onclick="selectCourseColor(this,'#16A34A')"></div>
+                                <div class="color-swatch" data-color="#D97706" style="background:#D97706" onclick="selectCourseColor(this,'#D97706')"></div>
+                                <div class="color-swatch" data-color="#DC2626" style="background:#DC2626" onclick="selectCourseColor(this,'#DC2626')"></div>
+                                <div class="color-swatch" data-color="#0891B2" style="background:#0891B2" onclick="selectCourseColor(this,'#0891B2')"></div>
+                                <div class="color-swatch" data-color="#9333EA" style="background:#9333EA" onclick="selectCourseColor(this,'#9333EA')"></div>
+                                <div class="color-swatch" data-color="#E11D48" style="background:#E11D48" onclick="selectCourseColor(this,'#E11D48')"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="newCoursePreview" class="hidden" style="padding:1rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface-2)">
+                        <div class="text-xs text-muted mb-2 font-semibold">PREVIEW</div>
+                        <div class="flex items-center gap-3">
+                            <div id="previewIcon" class="course-icon" style="background:#2563EB22;font-size:1.6rem;width:52px;height:52px">📚</div>
+                            <div>
+                                <div id="previewTitle" class="font-bold text-lg">Course Title</div>
+                                <div id="previewDesc" class="text-sm text-muted">Description goes here</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('addCourseModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveNewCourse()">🚀 Create Course</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── VIEW MATERIAL MODAL (Teacher) ─────────────────────── -->
+    <div class="modal-overlay" id="viewMaterialTeacherModal">
+        <div class="modal" style="max-width:780px">
+            <div class="modal-header">
+                <div class="modal-title" id="viewMatTeacherTitle">📄 Material Preview</div>
+                <button class="modal-close" onclick="closeViewMaterialTeacherModal()">✕</button>
+            </div>
+            <div class="modal-body" id="viewMatTeacherBody" style="padding:1rem;min-height:200px">
+                <!-- Preview content injected by JS -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeViewMaterialTeacherModal()">Close</button>
+                <button class="btn btn-primary" id="viewMatTeacherDlBtn">⬇️ Download File</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+    <!-- Firebase v9 Compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/mock-data.js"></script>
+    <script src="js/firebase-data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/teacher-app.js"></script>
+</body>
+
+</html>
